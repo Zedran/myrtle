@@ -67,7 +67,7 @@ func ParseQuery(resp *http.Response) ([]*Match, error) {
 		return nil, err
 	}
 
-	lines   := strings.Split(string(stream), "\n")
+	lines   := strings.Split(string(stream), "\r\n")
 
 	matches := make([]*Match, len(lines) / 3)
 

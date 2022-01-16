@@ -24,8 +24,9 @@ SWISSCUBE
 2 35932  98.5837 225.0161 0007892 155.7494 204.4076 14.56655971653547
 `
 
+	// Mock response needs to have 0d0a line breaks
 	mockResp := &http.Response{
-		Body: io.NopCloser(bytes.NewBuffer([]byte(sample)),
+		Body: io.NopCloser(bytes.NewBuffer([]byte(strings.Replace(sample, "\n", "\r\n", -1))),
 		),
 	}
 	defer mockResp.Body.Close()
