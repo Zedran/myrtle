@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -86,4 +87,14 @@ func NormalizeYear(y int) int {
 		return 1900 + y
 	}
 	return 2000 + y
+}
+
+/* Converts radians to degrees. */
+func Deg(rad float64) float64 {
+	return rad * 180 / math.Pi
+}
+
+/* Converts degrees to radians. */
+func Rad(deg float64) float64 {
+	return deg * math.Pi / 180
 }
