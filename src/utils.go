@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"strconv"
@@ -45,6 +46,67 @@ func ExpandClass(c string) string {
 	default:
 		return "Unknown"
 	}
+}
+
+/* Formats the number n. leftPadding and precision are parameters for sprintf ensuring a proper placement 
+ * of the number. isAngle causes the function to treat the number as an angle - a degree sign is appended 
+ * and the reduction is omitted, since the angles never reach 1e3. adjustPrecision is a parameter that 
+ * corrects the length of the fractional part to ensure the proper alignment of all values. It is needed 
+ * to trim the number to a specific width, regardless of whether the negation sign is present or the 
+ * integral part's digit count. It should be set to false for eccentricity and angular values, 
+ * since they have a set precision and are never negative. 
+ */
+func FormatNumber(n float64, leftPadding, precision int, isAngle, adjustPrecision bool) string {
+	const (
+		// A degree symbol in unicode
+		deg   string  = "\u00b0"
+
+		div   float64 = 1e3
+
+		templ string  = "%%%d.%df%%s"
+	)
+
+	// Prefixes indicating the order of magnitude
+	var pfx [9]string = [9]string{"", "k", "M", "G", "T", "P", "E", "Z", "Y"}
+	
+	if isAngle {
+		format := fmt.Sprintf(templ, leftPadding, precision)
+		return fmt.Sprintf(format, n, deg)
+	}
+
+	var sign float64
+	if n < 0 {
+		n = math.Abs(n)
+		sign = -1
+	} else {
+		sign = 1
+	}
+
+	var i int
+	for i = 0; i < len(pfx) && n > div; i++ {
+		n /= div
+	}
+
+	// Adjusts precision according to the number of digits in a number
+	if adjustPrecision {
+		switch {
+		case n < 10:
+			precision = 3
+		case n < 100:
+			precision = 2
+		default:
+			precision = 1
+		}
+		
+		// The precision is reduced if the minus symbol occupies one place
+		if sign < 0 {
+			precision--
+		}
+	}
+
+	format := fmt.Sprintf(templ, leftPadding, precision)
+
+	return fmt.Sprintf(format, n * sign, pfx[i])
 }
 
 /* Normalizes floating point numbers contained in TLE, as the decimal point and the exponent
@@ -97,4 +159,14 @@ func Deg(rad float64) float64 {
 /* Converts degrees to radians. */
 func Rad(deg float64) float64 {
 	return deg * math.Pi / 180
+}
+
+/* Converts Unix Time to Julian Day Number. */
+func UnixToJDN(unixSeconds int64) float64 {
+	return float64(unixSeconds) / 86400 + 2440587.5
+}
+
+/* Converts Julian Day Number to Modified Julian Date. */
+func JDNToMJD(jdn float64) float64 {
+	return jdn - 2400000.5
 }
