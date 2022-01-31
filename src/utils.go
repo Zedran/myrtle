@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
 )
 
-/* Atof handles parsing of the wild formats of TLE floats. Any error is printed to log output. */
+/* Atof handles parsing of the wild formats of TLE floats. Any error is printed to the log file. */
 func Atof(s string, normalize bool) float64 {
 	s = strings.Trim(s, " ")
 
@@ -18,17 +17,17 @@ func Atof(s string, normalize bool) float64 {
 
 	f, err := strconv.ParseFloat(s, 64)
 	if err != nil {
-		log.Println(err)
+		Log(err)
 	}
 
 	return f
 }
 
-/* A more compact version of Atoi. Any error is printed to log output. */
+/* A more compact version of Atoi. Any error is printed to the log file. */
 func Atoi(s string) int {
 	i, err := strconv.Atoi(strings.Trim(s, " "))
 	if err != nil {
-		log.Println(err)
+		Log(err)
 	}
 
 	return i
