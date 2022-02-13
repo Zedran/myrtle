@@ -13,6 +13,11 @@ type Match struct {
 	Title, Line1, Line2 string
 }
 
+/* Returns the sattellite's catalog number and classification. */
+func (m *Match) GetCatNum() string {
+	return m.Line1[2:8]
+}
+
 const (
 	// API URL to be formatted with query value type and a value
 	URL       string = "https://celestrak.com/NORAD/elements/gp.php?%s&FORMAT=TLE"
