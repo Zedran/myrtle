@@ -33,6 +33,27 @@ func Atoi(s string) int {
 	return i
 }
 
+/* Returns true if sequence is inside slice s. */
+func Contains(s []string, seq string) bool {
+	for i := range s {
+		if s[i] == seq {
+			return true
+		}
+	}
+	return false
+}
+
+/* Looks for part of a string inside a slice index. Returns index or -1 if nothing is found. */
+func ContainsPart(s []string, seq string) int {
+	for i := range s {
+		if strings.Contains(s[i], seq) {
+			return i
+		}
+	}
+
+	return -1
+}
+
 /* Expands NORAD classification abbreviations. */
 func ExpandClass(c string) string {
 	switch c {
@@ -148,6 +169,19 @@ func NormalizeYear(y int) int {
 		return 1900 + y
 	}
 	return 2000 + y
+}
+
+/* Rewrites the passed slice, omitting duplicate values. */
+func RemoveDuplicates(s []string) []string {
+	clean := make([]string, 0, len(s))
+
+	for i := range s {
+		if !Contains(clean, s[i]) {
+			clean = append(clean, s[i])
+		}
+	}
+
+	return clean
 }
 
 /* Converts radians to degrees. */
