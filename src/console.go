@@ -358,7 +358,6 @@ func (c *Console) parseSwitchResPageCommand(cmd string, direction int) {
 
 	n, err := strconv.Atoi(cmd[1:])
 	if err != nil {
-		Log("Page num indicator is not a number.")
 		return
 	}
 
