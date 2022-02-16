@@ -9,7 +9,7 @@
  *
  * These functions were adapted from: 
  *
- * Marc A. Murison. 2006. A Practical Method for Solving the Kepler Equation. [on-line]
+ * Murison M., A. 2006. A Practical Method for Solving the Kepler Equation. [on-line]
  * Available at http://murison.alpheratz.net/dynamics/twobody/KeplerIterations_summary.pdf
  * [accessed on 15.01.2022] U.S. Naval Observatory, Washington, DC.
  *
@@ -87,7 +87,7 @@ func MeanLongitude(mna, lpe float64) float64 {
 
 /* Eccentric anomaly solution adapted from:
  *
- * Marc A. Murison. 2006. A Practical Method for Solving the Kepler Equation.
+ * Murison M., A. 2006. A Practical Method for Solving the Kepler Equation.
  * For the full source description, see the top of the file or README.
  *
  * The function returns an error if the solution is not within a tolerance limits after
