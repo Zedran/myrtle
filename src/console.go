@@ -178,7 +178,7 @@ func (c *Console) showHelpPage() {
 		" /a    - display altitude  |  /r    - display radius  |  /p - precise values",
 		" /s    - short values      |  /n    - search by name  |  /c - search by cat num",
 		" />[n] - next results page |  /<[n] - previous page",
-		"\n\n\nSymbols:\n",
+		"\nSymbols:\n",
 		" SMa    -  Semi-Major Axis            |  SMi    -  Semi-Minor Axis",
 		" PeR/A  -  Periapsis Radius/Altitude  |  ApR/A  -  Apoapsis Radius/Altitude",
 		" R/Alt  -  Radius/Altitude            |  Ecc    -  Orbital Eccentricity",
@@ -189,6 +189,9 @@ func (c *Console) showHelpPage() {
 		" TrA    -  True Anomaly               |  TrL    -  True Longitude",
 		" MnA    -  Mean Anomaly               |  MnL    -  Mean Longitude",
 		" EcA    -  Eccentric Anomaly",
+		"\nReferences:\n",
+		" * CelesTrak - https://celestrak.com",
+		" * pterm     - https://github.com/pterm/pterm",
 	}
 
 	c.clear()
@@ -198,7 +201,7 @@ func (c *Console) showHelpPage() {
 		time.Sleep(SHORT_DELAY)
 	}
 
-	c.offSetBy(4)
+	c.offSetBy(1)
 	c.getInput("Press any key to continue...")
 }
 
