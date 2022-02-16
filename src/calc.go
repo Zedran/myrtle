@@ -173,7 +173,7 @@ func TrueLongitude(tra, lpe float64) float64 {
 
 /* Converts epoch year and fraction of a day extracted from TLE to unix time in seconds. */
 func EpochToUnix(epochYear int, epochDay float64) int64 {
-	return time.Date(epochYear, time.January, 1, 0, 0, 0, 0, time.UTC).Unix() + int64(86400 * epochDay)
+	return time.Date(epochYear, time.January, 0, 0, 0, 0, 0, time.UTC).Unix() + int64(86400 * epochDay)
 }
 
 /* Calculates the average rate of sweep from orbital period [deg/sec]. */
