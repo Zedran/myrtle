@@ -202,7 +202,7 @@ func (c *Console) showHelpPage() {
 	}
 
 	c.offSetBy(1)
-	c.getInput("Press any key to continue...")
+	c.getInput("Press Enter to continue...")
 }
 
 /* Gets input from the user and creates a phrase from it. */
