@@ -4,7 +4,7 @@
 
 MyRTLE is a TLE browser application written in Go. Years ago, I created its sloppy predecessor while learning programming. I have decided to rewrite it from scratch according to my current knowledge of both the orbital mechanics and programming.
 
-This application uses [CelesTrack](https://celestrak.com) as the source of data and calculates all of the orbital elements from the downloaded set. Its command line interface uses the [pterm](https://github.com/pterm/pterm) module.
+This application uses [CelesTrack](https://celestrak.com) as the source of data and calculates all of the orbital elements from the downloaded set. Its command line interface uses the [pterm](https://github.com/pterm/pterm) module. Requires Go v1.19 or newer.
 
 ## Description
 
