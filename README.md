@@ -18,7 +18,7 @@ ISS (ZARYA)
 
 This information allows us to calculate the exact position and velocity of a body as well as predict changes due to various object-specific forces, such as atmospheric drag.
 
-Orbital elements symbols and the display format mimic those seen on Orbit MFD in \[Orbiter Space Flight Simulator](http://orbit.medphys.ucl.ac.uk).
+Orbital elements symbols and their display format is based on Orbit MFD from [Orbiter Space Flight Simulator](https://www.github.com/orbitersim/orbiter).
 
 ```
 SMa    -  Semi-Major Axis
