@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/pterm/pterm"
+	"github.com/pterm/pterm/putils"
 )
 
 // Current page indicator type
@@ -126,9 +127,9 @@ func (c *Console) showStartPage() {
 	c.offSetBy(6)
 
 	title, err := pterm.DefaultBigText.WithLetters(
-		pterm.NewLettersFromStringWithStyle("My", pterm.NewStyle(pterm.FgLightGreen)),
-		pterm.NewLettersFromStringWithStyle("R", pterm.NewStyle(pterm.FgRed)),
-		pterm.NewLettersFromStringWithStyle("TLE", pterm.NewStyle(pterm.FgCyan))).Srender()
+		putils.LettersFromStringWithStyle("My", pterm.NewStyle(pterm.FgLightGreen)),
+		putils.LettersFromStringWithStyle("R", pterm.NewStyle(pterm.FgRed)),
+		putils.LettersFromStringWithStyle("TLE", pterm.NewStyle(pterm.FgCyan))).Srender()
 	if err != nil {
 		Log(err)
 	}
