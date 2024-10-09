@@ -8,25 +8,25 @@ import (
 	"strings"
 )
 
-/* Match struct contains a TLE set split into separate lines of text. */
+// Match struct contains a TLE set split into separate lines of text.
 type Match struct {
 	Title, Line1, Line2 string
 }
 
-/* Returns the sattellite's catalog number and classification. */
+// Returns the sattellite's catalog number and classification.
 func (m *Match) GetCatNum() string {
 	return m.Line1[2:8]
 }
 
 const (
 	// API URL to be formatted with query value type and a value
-	URL       string = "https://celestrak.com/NORAD/elements/gp.php?%s&FORMAT=TLE"
+	URL string = "https://celestrak.com/NORAD/elements/gp.php?%s&FORMAT=TLE"
 
 	// The length of the TLE Title Line
-	TITLE_LEN int    = 24
+	TITLE_LEN int = 24
 
 	// Minimum query length - to avoid downloading of half the database
-	MIN_QLEN  int    =  3
+	MIN_QLEN int = 3
 )
 
 var (
@@ -37,17 +37,16 @@ var (
 	errShortQuery = errors.New("query value is too short")
 )
 
-/* Queries the API with object name or NORAD catalogue number. If both values are not of zero length,
- * the catalogue number is preferred. The result is a list of pointers to Match structs containing 
- * results.
- */
+// Queries the API with object name or NORAD catalogue number. If both values
+// are not of zero length, the catalogue number is preferred.
+// The result is a list of pointers to Match structs containing results.
 func Query(client *http.Client, name, catnr string) ([]*Match, error) {
 	if len(name) < MIN_QLEN && len(catnr) < MIN_QLEN {
 		return nil, errShortQuery
 	}
 
 	var queryValue string
-	
+
 	if len(catnr) != 0 {
 		queryValue = "CATNR=" + catnr
 	} else if len(name) != 0 {
@@ -65,27 +64,27 @@ func Query(client *http.Client, name, catnr string) ([]*Match, error) {
 	return ParseQuery(resp)
 }
 
-/* Parses the response from the API and returns the results as a list of pointers to Match structs. */
+// Parses the response from the API and returns the results as a list of pointers to Match structs.
 func ParseQuery(resp *http.Response) ([]*Match, error) {
 	stream, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	lines   := strings.Split(string(stream), "\r\n")
+	lines := strings.Split(string(stream), "\r\n")
 
-	matches := make([]*Match, len(lines) / 3)
+	matches := make([]*Match, len(lines)/3)
 
 	iM := 0
 
 	for i := 0; i < len(lines); i++ {
 		if len(lines[i]) == TITLE_LEN {
 			matches[iM] = &Match{
-				Title: lines[i    ],
-				Line1: lines[i + 1],
-				Line2: lines[i + 2],
+				Title: lines[i],
+				Line1: lines[i+1],
+				Line2: lines[i+2],
 			}
-			
+
 			iM++
 			i += 2
 		}

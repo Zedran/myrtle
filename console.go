@@ -9,66 +9,67 @@ import (
 	"time"
 
 	"github.com/pterm/pterm"
+	"github.com/pterm/pterm/putils"
 )
 
 // Current page indicator type
 type Page uint8
 
 const (
-	EXIT         Page = iota
+	EXIT Page = iota
 	START_PAGE
 	RESULTS_PAGE
 	OBJECT_PAGE
 )
 
 const (
-	LONG_DELAY       = 50 * time.Millisecond
-	MED_DELAY        = 25 * time.Millisecond
-	SHORT_DELAY      = 10 * time.Millisecond
+	LONG_DELAY  = 50 * time.Millisecond
+	MED_DELAY   = 25 * time.Millisecond
+	SHORT_DELAY = 10 * time.Millisecond
 
 	RES_PER_PAGE int = 20
 
-	TERM_HEIGHT  int = 26
-	TERM_WIDTH   int = 80
+	TERM_HEIGHT int = 26
+	TERM_WIDTH  int = 80
 )
 
 type Console struct {
 	// Old console dimensions that are restored on exit
-	oldH, 
-	oldW    int
+	oldH,
+	oldW int
 
 	// Currently displayed page
-	page    Page
+	page Page
 
 	// Current results page
 	resPage int
 
 	// Display radius / altitude ASL
-	radius  bool
+	radius bool
 
 	// Display precise / shortened values
 	precise bool
 
 	// Search by name / catalog number
-	byName  bool
+	byName bool
 
-	// Http client used to fetch data
-	client  *http.Client
+	// HTTP client used to fetch data
+	client *http.Client
 
 	// Input scanner
 	scanner *bufio.Scanner
 
 	// A pointer to current phrase
-	phrase  *Phrase
+	phrase *Phrase
 
 	// A list of pointers to found matches
 	matches []*Match
 
 	// A pointer to most recently computed object
-	curObj  *Elements
+	curObj *Elements
 }
 
-/* Main method of struct that launches and drives the interface. */
+// Main method of struct that launches and drives the interface.
 func (c *Console) Run() {
 	defer c.clear()
 	defer c.restoreTerminalSize()
@@ -90,7 +91,7 @@ func (c *Console) Run() {
 	}
 }
 
-/* Creates a list of matches according to provided string. */
+// Creates a list of matches according to provided string.
 func (c *Console) fetchData(queryString string) {
 	var (
 		matches []*Match
@@ -119,16 +120,16 @@ func (c *Console) fetchData(queryString string) {
 	}
 }
 
-/* Prints the starting page. */
+// Prints the starting page.
 func (c *Console) showStartPage() {
 	c.clear()
 
 	c.offSetBy(6)
 
 	title, err := pterm.DefaultBigText.WithLetters(
-		pterm.NewLettersFromStringWithStyle("My",  pterm.NewStyle(pterm.FgLightGreen)),
-		pterm.NewLettersFromStringWithStyle("R",   pterm.NewStyle(pterm.FgRed)),
-		pterm.NewLettersFromStringWithStyle("TLE", pterm.NewStyle(pterm.FgCyan))).Srender()
+		putils.LettersFromStringWithStyle("My", pterm.NewStyle(pterm.FgLightGreen)),
+		putils.LettersFromStringWithStyle("R", pterm.NewStyle(pterm.FgRed)),
+		putils.LettersFromStringWithStyle("TLE", pterm.NewStyle(pterm.FgCyan))).Srender()
 	if err != nil {
 		Log(err)
 	}
@@ -144,7 +145,7 @@ func (c *Console) showStartPage() {
 	c.showSearchDialog()
 }
 
-/* Prints the page containing the query results. */
+// Prints the page containing the query results.
 func (c *Console) showResultsPage() {
 	c.clear()
 	c.printMatches()
@@ -156,12 +157,13 @@ func (c *Console) showResultsPage() {
 		return
 	}
 
-	tle        := ParseMatch(c.matches[n])
-	c.curObj    = CalculateElements(tle, M_E, R_E)
+	tle := ParseMatch(c.matches[n])
+	c.curObj = CalculateElements(tle, M_E, R_E)
 	c.nextPage()
 }
 
-/* Displays the object page containing calculated orbital elements for the selected sattellite. */
+// Displays the object page containing calculated orbital elements
+// for the selected sattellite.
 func (c *Console) showObjectPage() {
 	c.clear()
 	c.printElements(!c.radius, c.precise)
@@ -170,7 +172,7 @@ func (c *Console) showObjectPage() {
 	c.showSearchDialog()
 }
 
-/* Displays the help page. */
+// Displays the help page.
 func (c *Console) showHelpPage() {
 	msg := []string{
 		"Commands:\n",
@@ -205,14 +207,15 @@ func (c *Console) showHelpPage() {
 	c.getInput("Press Enter to continue...")
 }
 
-/* Gets input from the user and creates a phrase from it. */
+// Gets input from the user and creates a phrase from it.
 func (c *Console) getInput(prompt string) *Phrase {
 	pterm.Print(prompt + "  ")
 	c.scanner.Scan()
 	return NewPhrase(c.scanner.Text())
 }
 
-/* Prompts the user to pick the result and runs commands included inside the input. */
+// Prompts the user to pick the result and runs commands included inside
+// the input.
 func (c *Console) pickResult() int {
 	length := len(c.matches)
 
@@ -241,7 +244,8 @@ func (c *Console) pickResult() int {
 	}
 }
 
-/* Displays the search dialog and launches action depending on the provided input. */
+// Displays the search dialog and launches action depending
+// on the provided input.
 func (c *Console) showSearchDialog() {
 	for {
 		phrase := c.getInput("SEARCH FOR:")
@@ -256,10 +260,10 @@ func (c *Console) showSearchDialog() {
 		}
 
 		if len(phrase.Object) > 0 {
-			c.phrase  = phrase
+			c.phrase = phrase
 			c.fetchData(c.phrase.Object)
 		}
-		
+
 		if c.matches != nil {
 			if c.page == OBJECT_PAGE && len(phrase.Object) > 0 {
 				c.previousPage()
@@ -271,9 +275,9 @@ func (c *Console) showSearchDialog() {
 	}
 }
 
-/* Prints object's orbital elements. If alt is true, the altitude ASL is displayed. If acc is true,
- * the values are not shortened and are displayed as exact numbers.
- */
+// Prints object's orbital elements. If alt is true, the altitude ASL
+// is displayed. If acc is true, the values are not shortened
+// and are displayed as exact numbers.
 func (c *Console) printElements(alt, acc bool) {
 	elements := c.curObj.ToString(alt, acc)
 
@@ -289,7 +293,7 @@ func (c *Console) printElements(alt, acc bool) {
 	time.Sleep(MED_DELAY)
 }
 
-/* Displays the current page of found results. */
+// Displays the current page of found results.
 func (c *Console) printMatches() {
 	pterm.Printf("RESULTS FOR %s (%d):\n\n", c.phrase.Object, len(c.matches))
 
@@ -297,62 +301,63 @@ func (c *Console) printMatches() {
 
 	var lastI int
 
-	if len(c.matches) < c.resPage * RES_PER_PAGE + RES_PER_PAGE {
+	if len(c.matches) < c.resPage*RES_PER_PAGE+RES_PER_PAGE {
 		lastI = len(c.matches)
 	} else {
-		lastI = c.resPage * RES_PER_PAGE + RES_PER_PAGE
+		lastI = c.resPage*RES_PER_PAGE + RES_PER_PAGE
 	}
 
 	for i := c.resPage * RES_PER_PAGE; i < lastI; i++ {
 		pterm.Printf(
-			"%9d |  NAME:%25s     NORAD SIG:%8s  | %2d\n", 
-			i + 1, c.matches[i].Title, c.matches[i].GetCatNum(), i + 1,
+			"%9d |  NAME:%25s     NORAD SIG:%8s  | %2d\n",
+			i+1, c.matches[i].Title, c.matches[i].GetCatNum(), i+1,
 		)
 		time.Sleep(SHORT_DELAY)
 	}
 
 	time.Sleep(MED_DELAY)
-	pterm.Printf("%66s     %d / %d", "PAGE:", c.resPage + 1, int(math.Ceil(float64(len(c.matches) / RES_PER_PAGE))) + 1)
+	pterm.Printf("%66s     %d / %d", "PAGE:", c.resPage+1, int(math.Ceil(float64(len(c.matches)/RES_PER_PAGE)))+1)
 	time.Sleep(MED_DELAY)
 }
 
-/* Skips to the next page. */
+// Skips to the next page.
 func (c *Console) nextPage() {
 	if c.page < OBJECT_PAGE {
 		c.page++
 	}
 }
 
-/* Skips to the previous page. */
+// Skips to the previous page.
 func (c *Console) previousPage() {
 	if c.page > EXIT {
 		c.page--
 	}
 }
 
-/* Clear console window. */
+// Clear console window.
 func (c *Console) clear() {
 	pterm.Println("\033[H\033[2J")
 }
 
-/* Offsets the current cursor position by n lines.*/
+// Offsets the current cursor position by n lines.
 func (c *Console) offSetBy(n int) {
 	for i := 0; i < n; i++ {
 		pterm.Println()
 	}
 }
 
-/* Restores the remembered terminal window size. */
+// Restores the remembered terminal window size.
 func (c *Console) restoreTerminalSize() {
 	c.setWorkingHeight(c.oldH, c.oldW)
 }
 
-/* Sets the terminal height and width according to the values passed. */
+// Sets the terminal height and width according to the values passed.
 func (c *Console) setWorkingHeight(h, w int) {
 	pterm.Printfln("\x1b[8;%d;%dt", h, w)
 }
 
-/* Parses the command that changes the matches currently displayed on the result page. */
+// Parses the command that changes the matches currently displayed
+// on the result page.
 func (c *Console) parseSwitchResPageCommand(cmd string, direction int) {
 	if len(cmd) == 1 {
 		c.switchResPage(direction)
@@ -367,17 +372,16 @@ func (c *Console) parseSwitchResPageCommand(cmd string, direction int) {
 	c.switchResPage(n * direction)
 }
 
-/* Sets new results page number. */
+// Sets new results page number.
 func (c *Console) switchResPage(by int) {
 	newN := c.resPage + by
-	if newN >= 0 && newN <= int(math.Ceil(float64(len(c.matches) / RES_PER_PAGE))) {
+	if newN >= 0 && newN <= int(math.Ceil(float64(len(c.matches)/RES_PER_PAGE))) {
 		c.resPage = newN
 	}
 }
 
-/* Runs commands contained within the Phrase. Returns true if any further action should be taken
- * by the calling function (e.g. proceed with query).
- */
+// Runs commands contained within the Phrase. Returns true if any further
+// action should be taken by the calling function (e.g. proceed with query).
 func (c *Console) runCommands(phrase *Phrase) bool {
 	if Contains(phrase.Commands, "b") {
 		c.previousPage()
@@ -402,7 +406,7 @@ func (c *Console) runCommands(phrase *Phrase) bool {
 		}
 	case RESULTS_PAGE:
 		rightIdx := ContainsPart(phrase.Commands, ">")
-		leftIdx  := ContainsPart(phrase.Commands, "<")
+		leftIdx := ContainsPart(phrase.Commands, "<")
 
 		if Contains(phrase.Commands, "f") && c.curObj != nil {
 			c.page = OBJECT_PAGE
@@ -422,11 +426,11 @@ func (c *Console) runCommands(phrase *Phrase) bool {
 	return false
 }
 
-/* Sets display flags according to commands contained within the Phrase. */
+// Sets display flags according to commands contained within the Phrase.
 func (c *Console) setFlags(phrase *Phrase) {
 	if Contains(phrase.Commands, "a") {
 		c.radius = false
-	} else if Contains(phrase.Commands, "r"){
+	} else if Contains(phrase.Commands, "r") {
 		c.radius = true
 	}
 
@@ -437,23 +441,23 @@ func (c *Console) setFlags(phrase *Phrase) {
 	}
 }
 
-/* Resets display flags. */
+// Resets display flags.
 func (c *Console) resetFlags() {
-	c.radius  = true
+	c.radius = true
 	c.precise = false
-	c.byName  = true
+	c.byName = true
 }
 
-/* Sets up the new console interface. */
+// Sets up the new console interface.
 func NewConsole(client *http.Client) *Console {
 	var c Console
 
-	c.oldH    = pterm.GetTerminalHeight()
-	c.oldW    = pterm.GetTerminalWidth()
+	c.oldH = pterm.GetTerminalHeight()
+	c.oldW = pterm.GetTerminalWidth()
 
-	c.page    = START_PAGE
+	c.page = START_PAGE
 
-	c.client  = client
+	c.client = client
 	c.scanner = bufio.NewScanner(os.Stdin)
 
 	c.resetFlags()
