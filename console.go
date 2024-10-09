@@ -336,7 +336,7 @@ func (c *Console) previousPage() {
 
 // Clear console window.
 func (c *Console) clear() {
-	pterm.Println("\033[H\033[2J")
+	pterm.Print("\033[H\033[2J")
 }
 
 // Offsets the current cursor position by n lines.
