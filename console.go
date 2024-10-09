@@ -210,8 +210,10 @@ func (c *Console) showHelpPage() {
 // Gets input from the user and creates a phrase from it.
 func (c *Console) getInput(prompt string) *Phrase {
 	pterm.Print(prompt + "  ")
-	c.scanner.Scan()
-	return NewPhrase(c.scanner.Text())
+	if c.scanner.Scan() {
+		return NewPhrase(c.scanner.Text())
+	}
+	return NewPhrase("/e")
 }
 
 // Prompts the user to pick the result and runs commands included inside
