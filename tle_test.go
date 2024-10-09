@@ -15,34 +15,34 @@ func TestParseLines(t *testing.T) {
 
 	tle := ParseMatch(&m)
 
-	pass1 := 
-		tle.L1.Number               == 1              && 
-		tle.L1.CatNum               == "25544"        && 
-		tle.L1.Class                == "Unclassified" && 
-		tle.L1.IntlDesig.LaunchYear == 1998           && 
-		tle.L1.IntlDesig.LaunchNum  == 67             && 
-		tle.L1.IntlDesig.LaunchComp == "A"            && 
-		tle.L1.Epoch.Year           == 2022           && 
-		tle.L1.Epoch.Day            == 14.20078024    && 
-		tle.L1.MnMDrvs.First        == -0.00001581    && 
-		tle.L1.MnMDrvs.Second       == 0              && 
-		tle.L1.BSTAR                == -0.20061e-4    && 
-		tle.L1.EphemerisType        == 0              && 
-		tle.L1.ElSetNum             == 999            && 
-		tle.L1.Checksum             == 1
+	pass1 :=
+		tle.L1.Number == 1 &&
+			tle.L1.CatNum == "25544" &&
+			tle.L1.Class == "Unclassified" &&
+			tle.L1.IntlDesig.LaunchYear == 1998 &&
+			tle.L1.IntlDesig.LaunchNum == 67 &&
+			tle.L1.IntlDesig.LaunchComp == "A" &&
+			tle.L1.Epoch.Year == 2022 &&
+			tle.L1.Epoch.Day == 14.20078024 &&
+			tle.L1.MnMDrvs.First == -0.00001581 &&
+			tle.L1.MnMDrvs.Second == 0 &&
+			tle.L1.BSTAR == -0.20061e-4 &&
+			tle.L1.EphemerisType == 0 &&
+			tle.L1.ElSetNum == 999 &&
+			tle.L1.Checksum == 1
 
-	pass2 := 
-		tle.L2.Number               == 2              && 
-		tle.L2.CatNum               == "25544"        && 
-		tle.L2.Inc                  == 51.6452        && 
-		tle.L2.LAN                  == 19.1428        && 
-		tle.L2.Ecc                  == 0.0006828      &&
-		tle.L2.AgP                  == 17.5887        &&
-		tle.L2.MnA                  == 10.3753        &&
-		tle.L2.MnM                  == 15.49476744    &&
-		tle.L2.RevN                 == 32130          &&
-		tle.L2.Checksum             == 9
-	
+	pass2 :=
+		tle.L2.Number == 2 &&
+			tle.L2.CatNum == "25544" &&
+			tle.L2.Inc == 51.6452 &&
+			tle.L2.LAN == 19.1428 &&
+			tle.L2.Ecc == 0.0006828 &&
+			tle.L2.AgP == 17.5887 &&
+			tle.L2.MnA == 10.3753 &&
+			tle.L2.MnM == 15.49476744 &&
+			tle.L2.RevN == 32130 &&
+			tle.L2.Checksum == 9
+
 	var fatalMsg string
 
 	if !pass1 {

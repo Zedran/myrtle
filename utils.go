@@ -68,27 +68,27 @@ func ExpandClass(c string) string {
 	}
 }
 
-/* Formats the number n. leftPadding and precision are parameters for sprintf ensuring a proper placement 
- * of the number. isAngle causes the function to treat the number as an angle - a degree sign is appended 
- * and the reduction is omitted, since the angles never reach 1e3. adjustPrecision is a parameter that 
- * corrects the length of the fractional part to ensure the proper alignment of all values. It is needed 
- * to trim the number to a specific width, regardless of whether the negation sign is present or the 
- * integral part's digit count. It should be set to false for eccentricity and angular values, 
- * since they have a set precision and are never negative. 
+/* Formats the number n. leftPadding and precision are parameters for sprintf ensuring a proper placement
+ * of the number. isAngle causes the function to treat the number as an angle - a degree sign is appended
+ * and the reduction is omitted, since the angles never reach 1e3. adjustPrecision is a parameter that
+ * corrects the length of the fractional part to ensure the proper alignment of all values. It is needed
+ * to trim the number to a specific width, regardless of whether the negation sign is present or the
+ * integral part's digit count. It should be set to false for eccentricity and angular values,
+ * since they have a set precision and are never negative.
  */
 func FormatNumber(n float64, leftPadding, precision int, isAngle, adjustPrecision bool) string {
 	const (
 		// A degree symbol in unicode
-		deg   string  = "\u00b0"
+		deg string = "\u00b0"
 
-		div   float64 = 1e3
+		div float64 = 1e3
 
-		templ string  = "%%%d.%df%%s"
+		templ string = "%%%d.%df%%s"
 	)
 
 	// Prefixes indicating the order of magnitude
 	var pfx [9]string = [9]string{"", "k", "M", "G", "T", "P", "E", "Z", "Y"}
-	
+
 	if isAngle {
 		format := fmt.Sprintf(templ, leftPadding, precision)
 		return fmt.Sprintf(format, n, deg)
@@ -117,7 +117,7 @@ func FormatNumber(n float64, leftPadding, precision int, isAngle, adjustPrecisio
 		default:
 			precision = 1
 		}
-		
+
 		// The precision is reduced if the minus symbol occupies one place
 		if sign < 0 {
 			precision--
@@ -126,7 +126,7 @@ func FormatNumber(n float64, leftPadding, precision int, isAngle, adjustPrecisio
 
 	format := fmt.Sprintf(templ, leftPadding, precision)
 
-	return fmt.Sprintf(format, n * sign, pfx[i])
+	return fmt.Sprintf(format, n*sign, pfx[i])
 }
 
 /* Normalizes floating point numbers contained in TLE, as the decimal point and the exponent
@@ -144,7 +144,7 @@ func NormalizeFloat(s string) string {
 
 	// Add the exponent of ten notation
 	liMinus := strings.LastIndex(s, "-")
-	liPlus  := strings.LastIndex(s, "+")
+	liPlus := strings.LastIndex(s, "+")
 
 	var li int
 
@@ -160,8 +160,8 @@ func NormalizeFloat(s string) string {
 }
 
 /* Since the year in international designator is represented as a two-digit number, this function
- * is needed to make sure a proper century is indicated. 
- * 57-99 == 1957-1999 
+ * is needed to make sure a proper century is indicated.
+ * 57-99 == 1957-1999
  * 00-56 == 2000-2056
  */
 func NormalizeYear(y int) int {
@@ -196,7 +196,7 @@ func Rad(deg float64) float64 {
 
 /* Converts Unix Time to Julian Day Number. */
 func UnixToJDN(unixSeconds int64) float64 {
-	return float64(unixSeconds) / 86400 + 2440587.5
+	return float64(unixSeconds)/86400 + 2440587.5
 }
 
 /* Converts Julian Day Number to Modified Julian Date. */

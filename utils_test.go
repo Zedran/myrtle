@@ -5,22 +5,22 @@ import "testing"
 /* Test case data structure for TestFormatNumber. */
 type formatNumberCase struct {
 	// Tested number
-	Number           float64
+	Number float64
 
 	// Correct output
 	CorString,
 
 	// Actual output
-	Output           string
+	Output string
 
 	// FormatNumber function parameters
 	leftPadding,
-	precision        int
+	precision int
 	isAngle,
-	adjustPrecision  bool
+	adjustPrecision bool
 
 	// Positive test completion indicator
-	Passed           bool
+	Passed bool
 }
 
 /* Runs the test and compares its output with the expected string. */
@@ -42,11 +42,11 @@ func TestFormatNumber(t *testing.T) {
 	cases := []*formatNumberCase{
 		// Elements related to radius, time and velocity
 		createCase(-4.125e6, "-4.12M", 5, 3, false, true),
-		createCase( 6.717e6, "6.717M", 5, 3, false, true),
+		createCase(6.717e6, "6.717M", 5, 3, false, true),
 
 		// Elements related to altitude ASL
-		createCase( 45.90e3, "45.90k", 5, 1, false, true),
-		createCase( 646.5e3, "646.5k", 5, 1, false, true),
+		createCase(45.90e3, "45.90k", 5, 1, false, true),
+		createCase(646.5e3, "646.5k", 5, 1, false, true),
 		createCase(-45.90e3, "-45.9k", 5, 1, false, true),
 		createCase(-646.5e3, " -646k", 5, 1, false, true),
 
@@ -55,9 +55,9 @@ func TestFormatNumber(t *testing.T) {
 		createCase(0.0447, "0.0447", 6, 4, false, false),
 
 		// Angles
-		createCase( 48.78, " 48.78" + deg, 6, 2, true, false),
-		createCase(210.30, "210.30" + deg, 6, 2, true, false),
-		createCase(  2.77, "  2.77" + deg, 6, 2, true, false),
+		createCase(48.78, " 48.78"+deg, 6, 2, true, false),
+		createCase(210.30, "210.30"+deg, 6, 2, true, false),
+		createCase(2.77, "  2.77"+deg, 6, 2, true, false),
 	}
 
 	passed := true
@@ -81,11 +81,11 @@ func TestFormatNumber(t *testing.T) {
  */
 func TestNormalizeFloat(t *testing.T) {
 	cases := map[string]string{
-		"-.00002182" : "-.00002182",
-		"00000-0"    : ".00000e-0",
-		"-11606-4"   : "-.11606e-4",
-		"0006703"    : ".0006703",
-		"-11606+4"   : "-.11606e+4",
+		"-.00002182": "-.00002182",
+		"00000-0":    ".00000e-0",
+		"-11606-4":   "-.11606e-4",
+		"0006703":    ".0006703",
+		"-11606+4":   "-.11606e+4",
 	}
 
 	failed := make(map[string]string)

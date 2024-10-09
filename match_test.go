@@ -26,8 +26,7 @@ SWISSCUBE
 
 	// Mock response needs to have 0d0a line breaks
 	mockResp := &http.Response{
-		Body: io.NopCloser(bytes.NewBuffer([]byte(strings.Replace(sample, "\n", "\r\n", -1))),
-		),
+		Body: io.NopCloser(bytes.NewBuffer([]byte(strings.Replace(sample, "\n", "\r\n", -1)))),
 	}
 	defer mockResp.Body.Close()
 
@@ -37,16 +36,16 @@ SWISSCUBE
 	}
 
 	// every set is a 3-liner, therefore
-	if len(output) != strings.Count(sample, "\n") / 3 {
+	if len(output) != strings.Count(sample, "\n")/3 {
 		t.Fatalf("Improper output slice length: %d", len(output))
-	} 
+	}
 
 	// testing the length of Lines 1 and 2
 	for i := range output {
 		if len(output[i].Line1) != LINE_LEN {
-			t.Fatalf("Improper line 1 length for struct %d", i + 1)
+			t.Fatalf("Improper line 1 length for struct %d", i+1)
 		} else if len(output[i].Line2) != LINE_LEN {
-			t.Fatalf("Improper line 2 length for struct %d", i + 1)
+			t.Fatalf("Improper line 2 length for struct %d", i+1)
 		}
 	}
 }

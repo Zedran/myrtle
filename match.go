@@ -20,13 +20,13 @@ func (m *Match) GetCatNum() string {
 
 const (
 	// API URL to be formatted with query value type and a value
-	URL       string = "https://celestrak.com/NORAD/elements/gp.php?%s&FORMAT=TLE"
+	URL string = "https://celestrak.com/NORAD/elements/gp.php?%s&FORMAT=TLE"
 
 	// The length of the TLE Title Line
-	TITLE_LEN int    = 24
+	TITLE_LEN int = 24
 
 	// Minimum query length - to avoid downloading of half the database
-	MIN_QLEN  int    =  3
+	MIN_QLEN int = 3
 )
 
 var (
@@ -38,7 +38,7 @@ var (
 )
 
 /* Queries the API with object name or NORAD catalogue number. If both values are not of zero length,
- * the catalogue number is preferred. The result is a list of pointers to Match structs containing 
+ * the catalogue number is preferred. The result is a list of pointers to Match structs containing
  * results.
  */
 func Query(client *http.Client, name, catnr string) ([]*Match, error) {
@@ -47,7 +47,7 @@ func Query(client *http.Client, name, catnr string) ([]*Match, error) {
 	}
 
 	var queryValue string
-	
+
 	if len(catnr) != 0 {
 		queryValue = "CATNR=" + catnr
 	} else if len(name) != 0 {
@@ -72,20 +72,20 @@ func ParseQuery(resp *http.Response) ([]*Match, error) {
 		return nil, err
 	}
 
-	lines   := strings.Split(string(stream), "\r\n")
+	lines := strings.Split(string(stream), "\r\n")
 
-	matches := make([]*Match, len(lines) / 3)
+	matches := make([]*Match, len(lines)/3)
 
 	iM := 0
 
 	for i := 0; i < len(lines); i++ {
 		if len(lines[i]) == TITLE_LEN {
 			matches[iM] = &Match{
-				Title: lines[i    ],
-				Line1: lines[i + 1],
-				Line2: lines[i + 2],
+				Title: lines[i],
+				Line1: lines[i+1],
+				Line2: lines[i+2],
 			}
-			
+
 			iM++
 			i += 2
 		}

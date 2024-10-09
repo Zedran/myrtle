@@ -31,11 +31,11 @@ func Logf(format string, args ...interface{}) {
 	Log(fmt.Sprintf(format, args...))
 }
 
-/* Opens the log file and returns a pointer to it. In case of os.PathError 
+/* Opens the log file and returns a pointer to it. In case of os.PathError
  * the error message is printed to stdout.
  */
 func getLogFile() *os.File {
-	logFile, err := os.OpenFile("log.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
+	logFile, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println(err)
 	}

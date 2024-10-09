@@ -7,8 +7,8 @@ const COMMAND_PREFIX = "/"
 /* Phrase passed by the user when asked for input. */
 type Phrase struct {
 	// Name or catalog number of an object
-	Object   string
-	
+	Object string
+
 	// A slice of commands passed
 	Commands []string
 }
@@ -18,7 +18,7 @@ func NewPhrase(queryString string) *Phrase {
 	if len(queryString) == 0 {
 		return nil
 	}
-	
+
 	var phrase Phrase
 
 	words := strings.Split(queryString, " ")

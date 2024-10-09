@@ -15,57 +15,57 @@ import (
 type Page uint8
 
 const (
-	EXIT         Page = iota
+	EXIT Page = iota
 	START_PAGE
 	RESULTS_PAGE
 	OBJECT_PAGE
 )
 
 const (
-	LONG_DELAY       = 50 * time.Millisecond
-	MED_DELAY        = 25 * time.Millisecond
-	SHORT_DELAY      = 10 * time.Millisecond
+	LONG_DELAY  = 50 * time.Millisecond
+	MED_DELAY   = 25 * time.Millisecond
+	SHORT_DELAY = 10 * time.Millisecond
 
 	RES_PER_PAGE int = 20
 
-	TERM_HEIGHT  int = 26
-	TERM_WIDTH   int = 80
+	TERM_HEIGHT int = 26
+	TERM_WIDTH  int = 80
 )
 
 type Console struct {
 	// Old console dimensions that are restored on exit
-	oldH, 
-	oldW    int
+	oldH,
+	oldW int
 
 	// Currently displayed page
-	page    Page
+	page Page
 
 	// Current results page
 	resPage int
 
 	// Display radius / altitude ASL
-	radius  bool
+	radius bool
 
 	// Display precise / shortened values
 	precise bool
 
 	// Search by name / catalog number
-	byName  bool
+	byName bool
 
 	// Http client used to fetch data
-	client  *http.Client
+	client *http.Client
 
 	// Input scanner
 	scanner *bufio.Scanner
 
 	// A pointer to current phrase
-	phrase  *Phrase
+	phrase *Phrase
 
 	// A list of pointers to found matches
 	matches []*Match
 
 	// A pointer to most recently computed object
-	curObj  *Elements
+	curObj *Elements
 }
 
 /* Main method of struct that launches and drives the interface. */
@@ -126,8 +126,8 @@ func (c *Console) showStartPage() {
 	c.offSetBy(6)
 
 	title, err := pterm.DefaultBigText.WithLetters(
-		pterm.NewLettersFromStringWithStyle("My",  pterm.NewStyle(pterm.FgLightGreen)),
-		pterm.NewLettersFromStringWithStyle("R",   pterm.NewStyle(pterm.FgRed)),
+		pterm.NewLettersFromStringWithStyle("My", pterm.NewStyle(pterm.FgLightGreen)),
+		pterm.NewLettersFromStringWithStyle("R", pterm.NewStyle(pterm.FgRed)),
 		pterm.NewLettersFromStringWithStyle("TLE", pterm.NewStyle(pterm.FgCyan))).Srender()
 	if err != nil {
 		Log(err)
@@ -156,8 +156,8 @@ func (c *Console) showResultsPage() {
 		return
 	}
 
-	tle        := ParseMatch(c.matches[n])
-	c.curObj    = CalculateElements(tle, M_E, R_E)
+	tle := ParseMatch(c.matches[n])
+	c.curObj = CalculateElements(tle, M_E, R_E)
 	c.nextPage()
 }
 
@@ -256,10 +256,10 @@ func (c *Console) showSearchDialog() {
 		}
 
 		if len(phrase.Object) > 0 {
-			c.phrase  = phrase
+			c.phrase = phrase
 			c.fetchData(c.phrase.Object)
 		}
-		
+
 		if c.matches != nil {
 			if c.page == OBJECT_PAGE && len(phrase.Object) > 0 {
 				c.previousPage()
@@ -297,22 +297,22 @@ func (c *Console) printMatches() {
 
 	var lastI int
 
-	if len(c.matches) < c.resPage * RES_PER_PAGE + RES_PER_PAGE {
+	if len(c.matches) < c.resPage*RES_PER_PAGE+RES_PER_PAGE {
 		lastI = len(c.matches)
 	} else {
-		lastI = c.resPage * RES_PER_PAGE + RES_PER_PAGE
+		lastI = c.resPage*RES_PER_PAGE + RES_PER_PAGE
 	}
 
 	for i := c.resPage * RES_PER_PAGE; i < lastI; i++ {
 		pterm.Printf(
-			"%9d |  NAME:%25s     NORAD SIG:%8s  | %2d\n", 
-			i + 1, c.matches[i].Title, c.matches[i].GetCatNum(), i + 1,
+			"%9d |  NAME:%25s     NORAD SIG:%8s  | %2d\n",
+			i+1, c.matches[i].Title, c.matches[i].GetCatNum(), i+1,
 		)
 		time.Sleep(SHORT_DELAY)
 	}
 
 	time.Sleep(MED_DELAY)
-	pterm.Printf("%66s     %d / %d", "PAGE:", c.resPage + 1, int(math.Ceil(float64(len(c.matches) / RES_PER_PAGE))) + 1)
+	pterm.Printf("%66s     %d / %d", "PAGE:", c.resPage+1, int(math.Ceil(float64(len(c.matches)/RES_PER_PAGE)))+1)
 	time.Sleep(MED_DELAY)
 }
 
@@ -370,7 +370,7 @@ func (c *Console) parseSwitchResPageCommand(cmd string, direction int) {
 /* Sets new results page number. */
 func (c *Console) switchResPage(by int) {
 	newN := c.resPage + by
-	if newN >= 0 && newN <= int(math.Ceil(float64(len(c.matches) / RES_PER_PAGE))) {
+	if newN >= 0 && newN <= int(math.Ceil(float64(len(c.matches)/RES_PER_PAGE))) {
 		c.resPage = newN
 	}
 }
@@ -402,7 +402,7 @@ func (c *Console) runCommands(phrase *Phrase) bool {
 		}
 	case RESULTS_PAGE:
 		rightIdx := ContainsPart(phrase.Commands, ">")
-		leftIdx  := ContainsPart(phrase.Commands, "<")
+		leftIdx := ContainsPart(phrase.Commands, "<")
 
 		if Contains(phrase.Commands, "f") && c.curObj != nil {
 			c.page = OBJECT_PAGE
@@ -426,7 +426,7 @@ func (c *Console) runCommands(phrase *Phrase) bool {
 func (c *Console) setFlags(phrase *Phrase) {
 	if Contains(phrase.Commands, "a") {
 		c.radius = false
-	} else if Contains(phrase.Commands, "r"){
+	} else if Contains(phrase.Commands, "r") {
 		c.radius = true
 	}
 
@@ -439,21 +439,21 @@ func (c *Console) setFlags(phrase *Phrase) {
 
 /* Resets display flags. */
 func (c *Console) resetFlags() {
-	c.radius  = true
+	c.radius = true
 	c.precise = false
-	c.byName  = true
+	c.byName = true
 }
 
 /* Sets up the new console interface. */
 func NewConsole(client *http.Client) *Console {
 	var c Console
 
-	c.oldH    = pterm.GetTerminalHeight()
-	c.oldW    = pterm.GetTerminalWidth()
+	c.oldH = pterm.GetTerminalHeight()
+	c.oldW = pterm.GetTerminalWidth()
 
-	c.page    = START_PAGE
+	c.page = START_PAGE
 
-	c.client  = client
+	c.client = client
 	c.scanner = bufio.NewScanner(os.Stdin)
 
 	c.resetFlags()
