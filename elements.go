@@ -6,43 +6,86 @@ import (
 	"time"
 )
 
-/* Elements struct holding orbital parameters derived from TLE. */
+// Elements struct holding orbital parameters derived from TLE.
 type Elements struct {
-	// Trimmed TLE lines
+	// The name of the described object
 	Name,
-	L1,
+
+	// Trimmed TLE lines
+	L1 string
 	L2 string
 
-	Epoch int64 // Epoch in unix seconds
+	// Epoch in unix seconds
+	Epoch int64
 
-	DM, // Mass of dominant body
-	DR, // Radius of dominant body
+	// Mass of dominant body
+	DM float64
 
-	SMa, // Semi-Major Axis
-	SMi, // Semi-Minor Axis
-	PeR, // Periapsis Radius
-	ApR, // Apoapsis Radius
-	R, // Radius at Epoch
-	Ecc, // Orbital Eccenticity
-	T, // Orbital Period
-	PeT, // Time to Periapsis
-	ApT, // Time to Apoapsis
-	Vel, // Velocity at Epoch
-	Inc, // Orbital Inclination
-	LAN, // Longitude of Ascending Node
-	LPe, // Longitude of Periapsis
-	AgP, // Argument of Periapsis
-	TrA, // True Anomaly
-	TrL, // True Longitude
-	MnA, // Mean Anomaly
-	MnL, // Mean Longitude
-	EcA float64 // Eccentric Anomaly
+	// Radius of dominant body
+	DR float64
+
+	// Semi-Major Axis
+	SMa float64
+
+	// Semi-Minor Axis
+	SMi float64
+
+	// Periapsis Radius
+	PeR float64
+
+	// Apoapsis Radius
+	ApR float64
+
+	// Radius at Epoch
+	R float64
+
+	// Orbital Eccenticity
+	Ecc float64
+
+	// Orbital Period
+	T float64
+
+	// Time to Periapsis
+	PeT float64
+
+	// Time to Apoapsis
+	ApT float64
+
+	// Velocity at Epoch
+	Vel float64
+
+	// Orbital Inclination
+	Inc float64
+
+	// Longitude of Ascending Node
+	LAN float64
+
+	// Longitude of Periapsis
+	LPe float64
+
+	// Argument of Periapsis
+	AgP float64
+
+	// True Anomaly
+	TrA float64
+
+	// True Longitude
+	TrL float64
+
+	// Mean Anomaly
+	MnA float64
+
+	// Mean Longitude
+	MnL float64
+
+	// Eccentric Anomaly
+	EcA float64
 
 	// Indicates that eccentric anomaly solution did not converge
 	EcAConvErr bool
 }
 
-/* Creates a title string consisting of the object name, dates and original set lines. */
+// Creates a title string consisting of the object name, dates and original set lines.
 func (e *Elements) GetTitle() string {
 	mjd := JDNToMJD(UnixToJDN(e.Epoch))
 	date := time.Unix(e.Epoch, 0).Format("2006-01-02T15:04:05 UTC")
@@ -50,18 +93,17 @@ func (e *Elements) GetTitle() string {
 	return fmt.Sprintf("%s    MJD %.5f    %4s\n    %4s\n    %4s\n\n", e.Name, mjd, date, e.L1, e.L2)
 }
 
-/* Converts the Elements struct fields into a slice of strings. If alt is true, the distance
- * will be displayed in relation to the dominant body's surface (ASL) instead of measuring it
- * from the body's center. If acc is true, the numbers are not crunched by FormatNumber function.
- * This increases their precision, but reduces readability.
- */
+// Converts the Elements struct fields into a slice of strings. If alt is true,
+// the distance will be displayed in relation to the dominant body's surface
+// (ASL) instead of measuring it from the body's center. If acc is true,
+// the numbers are not crunched by FormatNumber function. This increases
+// their precision, but reduces readability.
 func (e *Elements) ToString(alt, acc bool) []string {
 	var (
-		/* These variables are different depending on the reference point. If alt is true,
-		 * then periapsis, apoapsis and radius are converted to altitude ASL. The deltaD
-		 * (difference in distance) is equal to dominant body's radius in that case.
-		 * The aforementioned three variables are also named differently.
-		 */
+		// These variables are different depending on the reference point. If alt is true,
+		// then periapsis, apoapsis and radius are converted to altitude ASL. The deltaD
+		// (difference in distance) is equal to dominant body's radius in that case.
+		// The aforementioned three variables are also named differently.
 		deltaD    float64
 		pe, ap, r string
 
@@ -112,7 +154,7 @@ func (e *Elements) ToString(alt, acc bool) []string {
 	}
 }
 
-/* Creates Elements struct from TLE. Accepts dominant body mass and radius as well. */
+// Creates Elements struct from TLE. Accepts dominant body mass and radius as well.
 func CalculateElements(tle *TLE, m, r float64) *Elements {
 	var (
 		e   Elements
@@ -159,10 +201,10 @@ func CalculateElements(tle *TLE, m, r float64) *Elements {
 	return &e
 }
 
-/* Ensures the proper display format of the orbital element depending on its type.
- * If accurate is true, the value is not submitted to FormatNumber function.
- * This means it will be represented with maximum precision and reduced readability.
- */
+// Ensures the proper display format of the orbital element depending
+// on its type. If accurate is true, the value is not submitted
+// to FormatNumber function. This means it will be represented with maximum
+// precision and reduced readability.
 func ParamToString(symbol string, value float64, accurate bool) string {
 	if accurate {
 		return fmt.Sprintf("%-5s%f", symbol, value)

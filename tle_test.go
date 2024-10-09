@@ -2,9 +2,8 @@ package main
 
 import "testing"
 
-/* Tests ParseLines function, feeding it with data. Output must be equal to
- * the specified values.
- */
+// Tests ParseLines function, feeding it with data. Output must be equal to
+// the specified values.
 func TestParseLines(t *testing.T) {
 	// Sample Match struct with TLE set downloaded from the API
 	m := Match{

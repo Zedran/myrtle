@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-/* Match struct contains a TLE set split into separate lines of text. */
+// Match struct contains a TLE set split into separate lines of text.
 type Match struct {
 	Title, Line1, Line2 string
 }
 
-/* Returns the sattellite's catalog number and classification. */
+// Returns the sattellite's catalog number and classification.
 func (m *Match) GetCatNum() string {
 	return m.Line1[2:8]
 }
@@ -37,10 +37,9 @@ var (
 	errShortQuery = errors.New("query value is too short")
 )
 
-/* Queries the API with object name or NORAD catalogue number. If both values are not of zero length,
- * the catalogue number is preferred. The result is a list of pointers to Match structs containing
- * results.
- */
+// Queries the API with object name or NORAD catalogue number. If both values
+// are not of zero length, the catalogue number is preferred.
+// The result is a list of pointers to Match structs containing results.
 func Query(client *http.Client, name, catnr string) ([]*Match, error) {
 	if len(name) < MIN_QLEN && len(catnr) < MIN_QLEN {
 		return nil, errShortQuery
@@ -65,7 +64,7 @@ func Query(client *http.Client, name, catnr string) ([]*Match, error) {
 	return ParseQuery(resp)
 }
 
-/* Parses the response from the API and returns the results as a list of pointers to Match structs. */
+// Parses the response from the API and returns the results as a list of pointers to Match structs.
 func ParseQuery(resp *http.Response) ([]*Match, error) {
 	stream, err := io.ReadAll(resp.Body)
 	if err != nil {

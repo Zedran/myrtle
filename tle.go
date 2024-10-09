@@ -1,6 +1,7 @@
 package main
 
-/* TLE struct holds values extracted from the original two-line string set contained in Match. */
+// TLE struct holds values extracted from the original two-line string
+// set contained in Match.
 type TLE struct {
 	// Original Match struct that underwent parsing into TLE struct
 	Match *Match
@@ -18,9 +19,15 @@ type TLE struct {
 
 		// International Designator
 		IntlDesig struct {
-			LaunchYear int    // Launch year
-			LaunchNum  int    // Number of launch made on that year
-			LaunchComp string // Launch component in order
+
+			// Launch year
+			LaunchYear int
+
+			// Number of launch made on that year
+			LaunchNum int
+
+			// Launch component in order
+			LaunchComp string
 		}
 
 		Epoch struct {
@@ -34,7 +41,6 @@ type TLE struct {
 			Second float64
 		}
 
-		// B* drag term
 		BSTAR float64
 
 		EphemerisType int
@@ -53,21 +59,32 @@ type TLE struct {
 		// Satellite catalog number
 		CatNum string
 
-		Inc, // Inclination
-		LAN, // Longitude of Ascending Node
-		Ecc, // Eccentricity
-		AgP, // Argument of Periapsis
-		MnA, // Mean Anomaly
-		MnM float64 // Mean Motion
+		// Inclination
+		Inc float64
 
-		// Revolutions number
+		// Longitude of Ascending Node
+		LAN float64
+
+		// Eccentricity
+		Ecc float64
+
+		// Argument of Periapsis
+		AgP float64
+
+		// Mean Anomaly
+		MnA float64
+
+		// Mean Motion
+		MnM float64
+
+		// Number of revolutions
 		RevN int
 
 		Checksum int
 	}
 }
 
-/* Converts the Match struct into the TLE struct, splitting all the values.*/
+// Converts the Match struct into the TLE struct, splitting all the values.
 func ParseMatch(m *Match) *TLE {
 	var tle TLE
 

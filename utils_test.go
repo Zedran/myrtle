@@ -2,39 +2,40 @@ package main
 
 import "testing"
 
-/* Test case data structure for TestFormatNumber. */
+// Test case data structure for TestFormatNumber.
 type formatNumberCase struct {
 	// Tested number
 	Number float64
 
 	// Correct output
-	CorString,
+	CorString string
 
 	// Actual output
 	Output string
 
 	// FormatNumber function parameters
-	leftPadding,
-	precision int
-	isAngle,
+	leftPadding     int
+	precision       int
+	isAngle         bool
 	adjustPrecision bool
 
 	// Positive test completion indicator
 	Passed bool
 }
 
-/* Runs the test and compares its output with the expected string. */
+// Runs the test and compares its output with the expected string.
 func (tc *formatNumberCase) run() {
 	tc.Output = FormatNumber(tc.Number, tc.leftPadding, tc.precision, tc.isAngle, tc.adjustPrecision)
 	tc.Passed = (tc.Output == tc.CorString)
 }
 
-/* A constructor for formatNumberCase struct. */
+// A constructor for formatNumberCase struct.
 func createCase(n float64, corOut string, pad, prec int, isAngle, adjustPrec bool) *formatNumberCase {
 	return &formatNumberCase{n, corOut, "", pad, prec, isAngle, adjustPrec, false}
 }
 
-/* Test for FormatNumber function. Every output must be exactly the same the expected string. */
+// Test for FormatNumber function. Every output must be exactly equal
+// to the expected string.
 func TestFormatNumber(t *testing.T) {
 	// A degree symbol in unicode
 	const deg = "\u00b0"
@@ -76,9 +77,9 @@ func TestFormatNumber(t *testing.T) {
 	}
 }
 
-/* Tests whether NormalizeFloat function works correctly. Assumed decimal point and the exponent of ten
- * notation ('e') must be inserted properly for the test to complete.
- */
+// Tests whether NormalizeFloat function works correctly. Assumed decimal point
+// and the exponent of ten notation ('e') must be inserted properly
+// for the test to complete.
 func TestNormalizeFloat(t *testing.T) {
 	cases := map[string]string{
 		"-.00002182": "-.00002182",

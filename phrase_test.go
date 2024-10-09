@@ -2,7 +2,8 @@ package main
 
 import "testing"
 
-/* Tests whether the user input is parsed properly. No empty commands and duplicates are allowed. */
+// Tests whether the user input is parsed properly. No empty commands
+// and duplicates are allowed.
 func TestNewPhrase(t *testing.T) {
 	case1 := NewPhrase("/c/c")
 
