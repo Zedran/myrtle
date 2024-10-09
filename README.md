@@ -1,14 +1,10 @@
 # MyRTLE
 
-## My Refined TLE Browser
+## Introduction
 
-MyRTLE is a TLE browser application written in Go. Years ago, I created its sloppy predecessor while learning programming. I have decided to rewrite it from scratch according to my current knowledge of both the orbital mechanics and programming.
+MyRTLE (My Refined TLE Browser) is a TLE browser application written in Go. It uses [CelesTrack](https://celestrak.com) as the source of data.
 
-This application uses [CelesTrack](https://celestrak.com) as the source of data and calculates all of the orbital elements from the downloaded set. Its command line interface uses the [pterm](https://github.com/pterm/pterm) module. Requires Go v1.19 or newer.
-
-## Description
-
-### TLE
+## TLE
 
 Two-Line Element set is a data format that contains the most essential parameters describing the position and motion of a satellite in orbit around Earth. Every set consists of three lines, the first of which is a title line. The next two hold the basic orbital elements of a body at a given moment in time (epoch).
 
@@ -22,7 +18,7 @@ ISS (ZARYA)
 
 This information allows us to calculate the exact position and velocity of a body as well as predict changes due to various object-specific forces, such as atmospheric drag.
 
-Orbital elements symbols and the display format mimic those seen on Orbit MFD in [Orbiter Space Flight Simulator](http://orbit.medphys.ucl.ac.uk/).
+Orbital elements symbols and the display format mimic those seen on Orbit MFD in \[Orbiter Space Flight Simulator](http://orbit.medphys.ucl.ac.uk).
 
 ```
 SMa    -  Semi-Major Axis
@@ -48,11 +44,13 @@ EcA    -  Eccentric Anomaly
 
 If `!` appears by the eccentric anomaly's symbol it means that solution for Kepler's equation did not converge.
 
-### Installation
+## Installation
 
-I would encourage users to build the application themselves. I have provided the scripts to do so. However, zipped releases are available. If you choose to use them, download the right one for your system and unpack it anywhere.
+```
+go install github.com/Zedran/myrtle@latest
+```
 
-### Usage
+## Usage
 
 There are 4 commands that control the behavior of application:
 
@@ -80,17 +78,13 @@ The results page displays 20 found matches at a time. To skip to the next 20, us
 
 ## References
 
-1. Kelso, T., S. 1985. CelesTrak. [on-line] Available at https://celestrak.com [accessed on 15.01.2022] COMSPOC Corp. Exton, PA.
+1. Kelso, T., S. 1985. CelesTrak. \[on-line] Available at https://celestrak.com \[accessed on 15.01.2022] COMSPOC Corp. Exton, PA.
 
-2. Kelso, T., S. 2019. Frequently Asked Questions: Two-Line Element Set Format. CelesTrak. [on-line] Available at http://celestrak.com/columns/v04n03/ [accessed on 15.01.2022] COMSPOC Corp. Exton, PA.
+2. Kelso, T., S. 2019. Frequently Asked Questions: Two-Line Element Set Format. CelesTrak. \[on-line] Available at http://celestrak.com/columns/v04n03 \[accessed on 15.01.2022] COMSPOC Corp. Exton, PA.
 
-3. Murison, M., A. 2006. A Practical Method for Solving the Kepler Equation. [on-line]
-Available at http://murison.alpheratz.net/dynamics/twobody/KeplerIterations_summary.pdf
-[accessed on 15.01.2022] U.S. Naval Observatory, Washington, DC.
+3. Murison, M., A. 2006. A Practical Method for Solving the Kepler Equation. \[on-line] Available at http://murison.alpheratz.net/dynamics/twobody/KeplerIterations_summary.pdf \[accessed on 15.01.2022] U.S. Naval Observatory, Washington, DC.
 
-4. [Pterm](https://www.github.com/pterm/pterm) by Martin Wendt
-
-5. [Orbiter Space Flight Simulator](https://www.github.com/orbitersim/orbiter) by Martin Schweiger
+4. [Orbiter Space Flight Simulator](https://www.github.com/orbitersim/orbiter) by Martin Schweiger
 
 ## License
 
