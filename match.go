@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"unicode"
 )
 
 // Match struct contains a TLE set split into separate lines of text.
@@ -48,6 +49,10 @@ func Query(client *http.Client, name, catnr string) ([]*Match, error) {
 	var queryValue string
 
 	if len(catnr) != 0 {
+		runes := []rune(catnr)
+		if unicode.IsLetter(runes[len(catnr)-1]) {
+			catnr = catnr[:len(catnr)-1]
+		}
 		queryValue = "CATNR=" + catnr
 	} else if len(name) != 0 {
 		queryValue = "NAME=" + name

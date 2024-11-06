@@ -396,6 +396,12 @@ func (c *Console) runCommands(phrase *Phrase) bool {
 		return false
 	}
 
+	if Contains(phrase.Commands, "c") {
+		c.byName = false
+	} else { // if does or does not contain '/n' - the default search mode
+		c.byName = true
+	}
+
 	switch c.page {
 	case START_PAGE:
 		if Contains(phrase.Commands, "f") && len(c.matches) > 0 {
